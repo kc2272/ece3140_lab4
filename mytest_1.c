@@ -65,6 +65,7 @@ static unsigned int morse_pattern(unsigned int digit) {
 // Morse out via the pattern we calculate
 static void morse(unsigned int digit) {
     unsigned int pattern = morse_pattern(digit);
+    l_lock(&l); // Critical section starts
     for (unsigned int mask = 16; mask != 0; mask >>= 1) {
     	green_toggle_frdm();
         delay( (pattern & mask) ? UNIT_MS : 3 * UNIT_MS);
@@ -74,31 +75,16 @@ static void morse(unsigned int digit) {
     red_toggle_frdm(); // Note that the more has finished
     delay(500);
     red_toggle_frdm();
+	l_unlock(&l); // Critical section ends
 }
 
-void p1(void) {
-	l_lock(&l);
-	morse(3);
-	l_unlock(&l);
-}
+void p1(void) { morse(3); }
 
-void p2(void) {
-	l_lock(&l);
-	morse(1);
-	l_unlock(&l);
-}
+void p2(void) { morse(1); }
 
-void p3(void) {
-	l_lock(&l);
-	morse(4);
-	l_unlock(&l);
-}
+void p3(void) {	morse(4); }
 
-void p4(void) {
-	l_lock(&l);
-	morse(0);
-	l_unlock(&l);
-}
+void p4(void) { morse(0); }
 
 int main(void) {
 	led_init();
