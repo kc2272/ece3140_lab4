@@ -60,5 +60,10 @@ void l_lock(lock_t* l) {
  * @param l pointer to lock to be unlocked
  */
 void l_unlock(lock_t* l) {
-	l->locked = 0;
+void l_unlock(lock_t* l) {
+	__disable_irq();
+	l->locked = 0; 	// Regardless of the one line, this ensures this process will not be interrupted 
+					// given the compiler could interpret this, in any way
+	__enable_irq();
+}
 }
