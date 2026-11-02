@@ -13,20 +13,20 @@ void l_init(lock_t *l) {
 void l_lock(lock_t *l) {
     __disable_irq();
     if (l->locked == 0) {
-        l->locked = 1; 					// acquire lock
+        l->locked = 1; 					// acquired lock successfully
         __enable_irq();
         return;
     }
-    // lock acquired (add to blocked queue)
+    // failed to acquire lock (add to blocked queue)
     current_process_p->blocked = 1;
-    current_process_p->next = NULL; 	// tail end of wait queue
+    current_process_p->next = NULL; 	// tail end of blocked queue
 
     if (l->head == NULL) {
         l->head = current_process_p;    // queue was empty
     } else {
         process_t *p = l->head;
         while (p->next) p = p->next;    // move through queue until end is reached
-        p->next = current_process_p;
+        p->next = current_process_p;    // add current process to end of blocked queue
     }
 
     process_blocked();                  // context switch
