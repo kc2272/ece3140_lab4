@@ -21,11 +21,8 @@
 #include "3140_concur.h"
 
 typedef struct lock_ {
- /*
-  * YOU NEED TO PUT SOMETHING HERE
-  */
     int locked;
-	   process_t *head; //first process in blocked queue
+	process_t *head; //first process in blocked queue
 } lock_t;
 
 /**
