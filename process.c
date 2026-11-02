@@ -69,7 +69,11 @@ unsigned int * process_select (unsigned int * cursp) {
     //Suspending a process which has not yet finished
     //Save state and enqueue it on the process queueu
     current_process_p->sp = cursp;
-    enqueue(current_process_p,&process_queue);
+    // modification:
+     if (!current_process_p->blocked) {      // only requeue if it's not blocked
+    	 enqueue(current_process_p, &process_queue);
+     }
+
   } else {
     //Check if a process was running
     //Free its resources if it finished
